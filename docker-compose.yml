@@ -48,7 +48,7 @@ services:
   itflow-db:
     hostname: itflow-db
     container_name: itflow-db
-    image: mariadb:11.4-alpine
+    image: mariadb:11.4
     restart: always
     networks:
       - itflow-db

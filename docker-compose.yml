@@ -43,7 +43,7 @@ services:
       ITFLOW_URL: ${ITFLOW_URL:-demo.itflow.org}
       ITFLOW_HTTPS: ${ITFLOW_HTTPS:-true}
       ITFLOW_PORT: ${ITFLOW_PORT:-8080}
-      ITFLOW_REPO: ${ITFLOW_REPO:-github.com/itflow-org/itflow}
+      ITFLOW_REPO: ${ITFLOW_REPO:-github.com/rglastra/itflow}
       ITFLOW_REPO_BRANCH: ${ITFLOW_REPO_BRANCH:-master}
       ITFLOW_LOG_LEVEL: ${ITFLOW_LOG_LEVEL:-info}
       ITFLOW_DB_HOST: ${ITFLOW_DB_HOST:-itflow-db}

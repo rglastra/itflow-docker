@@ -12,6 +12,7 @@ networks:
 
 volumes:
   itflow-db:
+  itflow-data:
 
 ########################### ITFLOW
 services:
@@ -33,6 +34,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    volumes:
+      - itflow-data:/var/www/localhost/htdocs/uploads
+      - itflow-data:/var/www/localhost/htdocs/config.php
       start_period: 60s
     environment:
       TZ: ${TZ:-Etc/UTC}

@@ -31,15 +31,15 @@ services:
     ports:
       - "80:8080"
     environment:
-      - TZ=$TZ
-      - ITFLOW_NAME=ITFlow
-      - ITFLOW_URL=it.$ROOT_DOMAIN
-      - ITFLOW_PORT=8080
-      - ITFLOW_REPO=github.com/itflow-org/itflow
-      - ITFLOW_REPO_BRANCH=master
-      - ITFLOW_LOG_LEVEL=info
-      - ITFLOW_DB_HOST=itflow-db
-      - ITFLOW_DB_PASS=$ITFLOW_DB_PASS
+      - TZ=${TZ:-Etc/UTC}
+      - ITFLOW_NAME=${ITFLOW_NAME:-ITFlow}
+      - ITFLOW_URL=${ITFLOW_URL:-demo.itflow.org}
+      - ITFLOW_PORT=${ITFLOW_PORT:-8080}
+      - ITFLOW_REPO=${ITFLOW_REPO:-github.com/itflow-org/itflow}
+      - ITFLOW_REPO_BRANCH=${ITFLOW_REPO_BRANCH:-master}
+      - ITFLOW_LOG_LEVEL=${ITFLOW_LOG_LEVEL:-info}
+      - ITFLOW_DB_HOST=${ITFLOW_DB_HOST:-itflow-db}
+      - ITFLOW_DB_PASS=${ITFLOW_DB_PASS}
 
   itflow-db:
     hostname: itflow-db
@@ -50,8 +50,8 @@ services:
       - itflow-db
     environment:
       - MARIADB_RANDOM_ROOT_PASSWORD=true
-      - MARIADB_DATABASE=itflow
-      - MARIADB_USER=itflow
-      - MARIADB_PASSWORD=$ITFLOW_DB_PASS
+      - MARIADB_DATABASE=${ITFLOW_DB_NAME:-itflow}
+      - MARIADB_USER=${ITFLOW_DB_USER:-itflow}
+      - MARIADB_PASSWORD=${ITFLOW_DB_PASS}
     volumes:
       - itflow-db:/var/lib/mysql/    

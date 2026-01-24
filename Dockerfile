@@ -51,7 +51,11 @@ RUN sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/' /etc/apache
     sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/httpd.conf && \
     echo 'LoadModule php_module modules/mod_php84.so' >> /etc/apache2/httpd.conf && \
     echo 'AddType application/x-httpd-php .php' >> /etc/apache2/httpd.conf && \
-    echo 'DirectoryIndex index.php index.html' >> /etc/apache2/httpd.conf
+    echo 'DirectoryIndex index.php index.html' >> /etc/apache2/httpd.conf && \
+    echo '' >> /etc/apache2/httpd.conf && \
+    echo '# Trust reverse proxy headers for HTTPS detection' >> /etc/apache2/httpd.conf && \
+    echo 'SetEnvIf X-Forwarded-Proto "https" HTTPS=on' >> /etc/apache2/httpd.conf && \
+    echo 'SetEnvIf X-Forwarded-Proto "https" HTTP_X_FORWARDED_PROTO=https' >> /etc/apache2/httpd.conf
 
 # Set the work dir to the git repo. 
 WORKDIR /var/www/localhost/htdocs

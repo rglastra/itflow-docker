@@ -48,10 +48,20 @@ services:
   itflow-db:
     hostname: itflow-db
     container_name: itflow-db
-    image: mariadb:10.11.6
+    image: mariadb:11.4-alpine
     restart: always
     networks:
       - itflow-db
+    command: >
+      --innodb-buffer-pool-size=128M
+      --max-connections=50
+      --innodb-log-file-size=32M
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     environment:
       MARIADB_RANDOM_ROOT_PASSWORD: "true"
       MARIADB_DATABASE: ${ITFLOW_DB_NAME:-itflow}

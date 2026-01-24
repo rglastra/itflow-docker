@@ -1,13 +1,15 @@
 #!/bin/ash
 
 sed -i "s/^Listen.*/Listen $ITFLOW_PORT/g" /etc/apache2/httpd.conf
-rm -rf /var/www/localhost/htdocs/index.html
-# if itflow is not downloaded, perform the download after the volume mounting process within DockerFile is complete.
-if [[ -f /var/www/localhost/htdocs/index.php ]]; then 
-    cd /var/www/localhost/htdocs
-    # git fetch
-else
+
+# if itflow is not downloaded, perform the download
+if [[ ! -f /var/www/localhost/htdocs/index.php ]]; then 
+    echo "Cloning ITFlow from $ITFLOW_REPO (branch: $ITFLOW_REPO_BRANCH)..."
+    rm -rf /var/www/localhost/htdocs/*
     git clone --branch $ITFLOW_REPO_BRANCH https://$ITFLOW_REPO /var/www/localhost/htdocs
+else
+    echo "ITFlow already exists, skipping clone"
+    cd /var/www/localhost/htdocs
 fi
 
 git config --global --add safe.directory /var/www/localhost/htdocs

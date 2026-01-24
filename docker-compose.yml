@@ -19,11 +19,9 @@ services:
     platform: linux/amd64
     hostname: itflow
     container_name: itflow
-    # Comment out image for DockerHub image, use build for local DockerFile if you prefer to build from base
-    image: itfloworg/itflow:latest
-    #build: 
-      #context: .
-      #dockerfile: Dockerfile
+    build: 
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     depends_on: 
       - itflow-db
@@ -42,8 +40,6 @@ services:
       - ITFLOW_LOG_LEVEL=info
       - ITFLOW_DB_HOST=itflow-db
       - ITFLOW_DB_PASS=$ITFLOW_DB_PASS
-    volumes:
-      - ./itflow/:/var/www/localhost/htdocs
 
   itflow-db:
     hostname: itflow-db

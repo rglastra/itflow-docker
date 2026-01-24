@@ -28,6 +28,12 @@ services:
     networks:
       - wan
       - itflow-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${ITFLOW_PORT:-8080}/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     environment:
       TZ: ${TZ:-Etc/UTC}
       ITFLOW_NAME: ${ITFLOW_NAME:-ITFlow}

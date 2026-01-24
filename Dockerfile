@@ -18,6 +18,7 @@ RUN apk add \
     php84\
     whois\
     bind-tools\
+    curl\
     tzdata
 
 # Alpine quality of life installs

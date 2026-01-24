@@ -38,6 +38,7 @@ services:
       TZ: ${TZ:-Etc/UTC}
       ITFLOW_NAME: ${ITFLOW_NAME:-ITFlow}
       ITFLOW_URL: ${ITFLOW_URL:-demo.itflow.org}
+      ITFLOW_HTTPS: ${ITFLOW_HTTPS:-true}
       ITFLOW_PORT: ${ITFLOW_PORT:-8080}
       ITFLOW_REPO: ${ITFLOW_REPO:-github.com/itflow-org/itflow}
       ITFLOW_REPO_BRANCH: ${ITFLOW_REPO_BRANCH:-master}

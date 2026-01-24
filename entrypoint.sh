@@ -28,8 +28,19 @@ if [[ -f /var/www/localhost/htdocs/config.php ]]; then
     # Database Password
     sed -i "s/\$dbpassword.*';/\$dbpassword = '$ITFLOW_DB_PASS';/g" /var/www/localhost/htdocs/config.php
 
-    # Base URL
-    sed -i "s/\$config_base_url.*';/\$config_base_url = '$ITFLOW_URL';/g" /var/www/localhost/htdocs/config.php
+    # Base URL - add protocol if not present
+    if [[ "$ITFLOW_URL" =~ ^https?:// ]]; then
+        # URL already has protocol
+        BASE_URL="$ITFLOW_URL"
+    else
+        # No protocol - use ITFLOW_HTTPS env var (default: true)
+        if [ "${ITFLOW_HTTPS:-true}" = "true" ]; then
+            BASE_URL="https://$ITFLOW_URL"
+        else
+            BASE_URL="http://$ITFLOW_URL"
+        fi
+    fi
+    sed -i "s|\$config_base_url.*';|\$config_base_url = '$BASE_URL';|g" /var/www/localhost/htdocs/config.php
 
     # Repo Branch
     sed -i "s/\$repo_branch.*';/\$repo_branch = '$ITFLOW_REPO_BRANCH';/g" /var/www/localhost/htdocs/config.php

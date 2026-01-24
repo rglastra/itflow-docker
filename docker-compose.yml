@@ -34,10 +34,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    volumes:
-      - itflow-data:/var/www/localhost/htdocs/uploads
-      - itflow-data:/var/www/localhost/htdocs/config.php
       start_period: 60s
+    volumes:
+      - itflow-data:/var/itflow-data
     environment:
       TZ: ${TZ:-Etc/UTC}
       ITFLOW_NAME: ${ITFLOW_NAME:-ITFlow}

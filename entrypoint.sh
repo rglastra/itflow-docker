@@ -17,6 +17,16 @@ git config --global --add safe.directory /var/www/localhost/htdocs
 # Verify permissions of itflow git repository
 chown -R apache:apache /var/www/localhost/htdocs
 
+# Persist config.php and uploads to volume
+mkdir -p /var/itflow-data
+if [[ -f /var/itflow-data/config.php ]]; then
+    ln -sf /var/itflow-data/config.php /var/www/localhost/htdocs/config.php
+fi
+if [[ -d /var/itflow-data/uploads ]]; then
+    rm -rf /var/www/localhost/htdocs/uploads
+    ln -sf /var/itflow-data/uploads /var/www/localhost/htdocs/uploads
+fi
+
 # This updates the config.php file once initialization through setup.php has completed
 if [[ -f /var/www/localhost/htdocs/config.php ]]; then 
     # Company Name
@@ -38,9 +48,18 @@ if [[ -f /var/www/localhost/htdocs/config.php ]]; then
             BASE_URL="https://$ITFLOW_URL"
         else
             BASE_URL="http://$ITFLOW_URL"
-        fi
-    fi
-    sed -i "s|\$config_base_url.*';|\$config_base_url = '$BASE_URL';|g" /var/www/localhost/htdocs/config.php
+    # Copy config to persistent storage
+    cp -f /var/www/localhost/htdocs/config.php /var/itflow-data/config.php
+else 
+    chmod -R 777 /var/www/localhost/htdocs
+fi
+
+# Ensure uploads directory is persisted
+if [[ ! -d /var/itflow-data/uploads ]]; then
+    mv /var/www/localhost/htdocs/uploads /var/itflow-data/uploads 2>/dev/null || mkdir -p /var/itflow-data/uploads
+    ln -sf /var/itflow-data/uploads /var/www/localhost/htdocs/uploads
+fi
+chown -R apache:apache /var/itflow-data  sed -i "s|\$config_base_url.*';|\$config_base_url = '$BASE_URL';|g" /var/www/localhost/htdocs/config.php
 
     # Repo Branch
     sed -i "s/\$repo_branch.*';/\$repo_branch = '$ITFLOW_REPO_BRANCH';/g" /var/www/localhost/htdocs/config.php

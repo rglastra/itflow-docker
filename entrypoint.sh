@@ -14,11 +14,12 @@ fi
 
 git config --global --add safe.directory /var/www/localhost/htdocs
 
-# Verify permissions of itflow git repository
-chown -R apache:apache /var/www/localhost/htdocs
-
 # Persist config.php and uploads to volume
 mkdir -p /var/itflow-data
+
+# Ensure persistent data directory has correct ownership
+chown -R apache:apache /var/itflow-data
+
 if [[ -f /var/itflow-data/config.php ]]; then
     ln -sf /var/itflow-data/config.php /var/www/localhost/htdocs/config.php
 fi
@@ -26,6 +27,9 @@ if [[ -d /var/itflow-data/uploads ]]; then
     rm -rf /var/www/localhost/htdocs/uploads
     ln -sf /var/itflow-data/uploads /var/www/localhost/htdocs/uploads
 fi
+
+# Set permissions on itflow repository (must happen AFTER symlinks are created)
+chown -R apache:apache /var/www/localhost/htdocs
 
 # This updates the config.php file once initialization through setup.php has completed
 if [[ -f /var/www/localhost/htdocs/config.php ]]; then 
@@ -60,8 +64,9 @@ fi
 if [[ ! -d /var/itflow-data/uploads ]]; then
     mv /var/www/localhost/htdocs/uploads /var/itflow-data/uploads 2>/dev/null || mkdir -p /var/itflow-data/uploads
     ln -sf /var/itflow-data/uploads /var/www/localhost/htdocs/uploads
+    # Uploads moved, fix ownership
+    chown -R apache:apache /var/itflow-data/uploads
 fi
-chown -R apache:apache /var/itflow-data
 
 # Start Cron
 crond &
